@@ -44,7 +44,7 @@ quella logica si riusa così com'è.
 
 ## Prossimi passi in programma:
 
-1. **Pubblicarlo**: Pubblicazione su Streamlit Community Cloud.
+1. **Pubblicarlo**: Pubblicazione su Streamlit Community Cloud. - FATTO
 2. **Precalcolare** i dati dopo ogni GP con un job automatico, così nessun visitatore aspetta il download.
 3. **Confronto su un giro a scelta** (non solo il più veloce) e confronto tra stagioni sulla stessa pista.
 4. **Pagina pilota** e **pagina stagione** (classifiche mondiali, andamento punti) con i dati Jolpica.
