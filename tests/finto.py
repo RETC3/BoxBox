@@ -7,7 +7,7 @@ from __future__ import annotations
 import numpy as np
 import pandas as pd
 
-from boxbox.dati import DatiSessione
+from boxbox.archivio import DatiSessione
 
 PILOTI = [  # sigla, nome, squadra, colore, griglia, arrivo
     ("AAA", "Mario Rossi", "Squadra Rossa", "DC0000", 2, "1"),
@@ -22,16 +22,8 @@ CURVE_VMIN = [95, 180, 240, 120, 210, 150]
 LUNGHEZZA = 5000.0
 
 
-def calendario(anno: int) -> pd.DataFrame:
-    righe = []
-    for r, nome in enumerate(["Italian Grand Prix", "Monaco Grand Prix"], start=1):
-        base = pd.Timestamp("2026-09-01") + pd.Timedelta(days=14 * r)
-        riga = {"RoundNumber": r, "EventName": nome, "Location": "Monza", "Country": "Italy", "EventDate": base}
-        for i, s in enumerate(["Practice 1", "Practice 2", "Practice 3", "Qualifying", "Race"], start=1):
-            riga[f"Session{i}"] = s
-            riga[f"Session{i}DateUtc"] = base - pd.Timedelta(days=2) + pd.Timedelta(hours=6 * i)
-        righe.append(riga)
-    return pd.DataFrame(righe)
+EVENTO = {"nome": "Italian Grand Prix", "luogo": "Monza, Italy", "data": "2026-09-06",
+          "sessioni": ["Practice 1", "Practice 2", "Practice 3", "Qualifying", "Race"]}
 
 
 def telemetria(bravura_curva: float, frenata: float, vmax: float) -> pd.DataFrame:
