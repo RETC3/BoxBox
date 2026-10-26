@@ -9,8 +9,9 @@ from .archivio import DatiSessione  # noqa: F401  (comodo da importare da qui)
 from .nomi import NOMI_SESSIONI, nome_gp, tipo_sessione
 
 
-@st.cache_data(ttl=600, show_spinner=False)
 def indice() -> dict[int, list[dict]]:
+    # Niente cache: leggere l'elenco richiede pochi millisecondi, e così le sessioni
+    # appena scaricate compaiono subito, senza dover riavviare il sito.
     return archivio.indice()
 
 
