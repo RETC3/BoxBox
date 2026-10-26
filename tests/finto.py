@@ -60,10 +60,8 @@ TEL = {
 }
 
 
-class SessioneFinta(DatiSessione):
-    def telemetria_giro_veloce(self, pilota):
-        tel = TEL[pilota]
-        return float(tel["Time"].iloc[-1].total_seconds()), tel
+def telemetrie() -> dict:
+    return {p: (float(t["Time"].iloc[-1].total_seconds()), t) for p, t in TEL.items()}
 
 
 def risultati() -> pd.DataFrame:
@@ -112,4 +110,4 @@ def curve() -> pd.DataFrame:
 
 def carica(anno, round_, nome) -> DatiSessione:
     meteo = pd.DataFrame({"AirTemp": [24.0, 25.0], "TrackTemp": [40.0, 42.0], "Rainfall": [False, False]})
-    return SessioneFinta(risultati(), giri(), meteo, curve(), 30.0, None)
+    return DatiSessione(risultati(), giri(), meteo, curve(), 30.0, telemetrie())

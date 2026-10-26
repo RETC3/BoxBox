@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import datetime as dt
+import gc
 from dataclasses import dataclass, field
 from pathlib import Path
 
@@ -68,18 +69,31 @@ class DatiSessione:
     meteo: pd.DataFrame
     curve: pd.DataFrame | None
     rotazione: float
-    sessione: object = None  # oggetto FastF1 originale
-    _tel: dict = field(default_factory=dict, repr=False)
+    # pilota -> (tempo in secondi, telemetria del giro più veloce)
+    telemetrie: dict = field(default_factory=dict, repr=False)
 
     def telemetria_giro_veloce(self, pilota: str) -> tuple[float, pd.DataFrame] | None:
         """(tempo in secondi, telemetria) del giro più veloce di un pilota."""
-        if pilota not in self._tel:
-            giro = self.sessione.laps.pick_drivers(pilota).pick_fastest()
+        return self.telemetrie.get(pilota)
+
+
+_COLONNE_TEL = ["Distance", "Time", "Speed", "Throttle", "Brake", "nGear", "X", "Y"]
+
+
+def _telemetrie_giri_veloci(s) -> dict:
+    """Estrae solo la telemetria dei giri più veloci: pochi MB invece delle centinaia della sessione intera."""
+    out = {}
+    for pilota in s.laps["Driver"].dropna().unique():
+        try:
+            giro = s.laps.pick_drivers(pilota).pick_fastest()
             if giro is None or pd.isna(giro["LapTime"]):
-                self._tel[pilota] = None
-            else:
-                self._tel[pilota] = (giro["LapTime"].total_seconds(), pd.DataFrame(giro.get_telemetry()))
-        return self._tel[pilota]
+                continue
+            tel = pd.DataFrame(giro.get_telemetry())
+            out[pilota] = (giro["LapTime"].total_seconds(),
+                           tel[[c for c in _COLONNE_TEL if c in tel]].reset_index(drop=True))
+        except Exception:
+            continue  # pilota senza telemetria valida: lo saltiamo
+    return out
 
 
 @st.cache_data(ttl=3600, show_spinner=False)
@@ -87,7 +101,7 @@ def calendario(anno: int) -> pd.DataFrame:
     return pd.DataFrame(fastf1.get_event_schedule(anno, include_testing=False))
 
 
-@st.cache_resource(max_entries=4, show_spinner=False)
+@st.cache_resource(max_entries=6, ttl=6 * 3600, show_spinner=False)
 def carica(anno: int, round_: int, nome_sessione: str) -> DatiSessione:
     s = fastf1.get_session(anno, round_, nome_sessione)
     s.load(laps=True, telemetry=True, weather=True, messages=True)
@@ -100,7 +114,10 @@ def carica(anno: int, round_: int, nome_sessione: str) -> DatiSessione:
     except Exception:
         curve, rotazione = None, 0.0
     meteo = pd.DataFrame(s.weather_data) if s.weather_data is not None else pd.DataFrame()
-    return DatiSessione(pd.DataFrame(s.results), giri, meteo, curve, rotazione, s)
+    dati = DatiSessione(pd.DataFrame(s.results), giri, meteo, curve, rotazione, _telemetrie_giri_veloci(s))
+    del s  # la sessione completa (centinaia di MB) non serve più
+    gc.collect()
+    return dati
 
 
 def _utc_naive(x) -> pd.Timestamp:
