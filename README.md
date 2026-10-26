@@ -1,8 +1,7 @@
 # 🏁 Box Box – Telemetria F1 in italiano
 
 Un sito in italiano che mostra statistiche e telemetria della F1 **spiegate a parole**, pensato per chi
-guarda le gare la domenica e non per gli ingegneri. *(Box Box è un nome provvisorio.)*
-
+guarda le gare la domenica e non per gli ingegneri. 
 ## Cosa c'è dentro
 
 | Pagina | Cosa fa |
