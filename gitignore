@@ -1,0 +1,22 @@
+# Ambiente virtuale Python (si ricrea con: pip install -r requirements.txt)
+.venv/
+venv/
+env/
+
+# Dati F1 scaricati da FastF1 (si riscaricano da soli)
+cache/
+
+# File temporanei di Python e dei test
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# Segreti di Streamlit (password, chiavi API): non vanno mai online
+.streamlit/secrets.toml
+
+# File di sistema e degli editor
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
