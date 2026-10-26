@@ -26,6 +26,13 @@ streamlit run app.py
 Si apre il browser su `http://localhost:8501`. La prima volta che apri una sessione i dati vengono
 scaricati (30-60 secondi); poi restano nella cartella `cache/` e il caricamento è istantaneo.
 
+## Disponibile online
+Se non si vuole scaricarlo in locale e farlo girare sul proprio dispositivo è stato implementato una versione gratuita su Streamlit. 
+Streamlit garantisce circa 690 MB di memoria (può arrivare fino a 2,7 GB), mentre una sessione F1 completa ne occupa centinaia. 
+Prima l’app teneva in memoria fino a 4 sessioni intere. 
+Ora, quando apre una sessione, conserva solo i dati che usa davvero (giri, risultati e la telemetria dei giri più veloci) e libera subito il resto. 
+Il primo caricamento di una sessione dura qualche secondo in più, ma il sito non va più in crisi di memoria.
+
 ## Struttura
 
 ```
