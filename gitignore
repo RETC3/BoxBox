@@ -1,4 +1,7 @@
-
+# Ambiente virtuale Python (si ricrea con: pip install -r requirements.txt)
+.venv/
+venv/
+env/
 
 # Dati F1 scaricati da FastF1 (si riscaricano da soli)
 cache/
