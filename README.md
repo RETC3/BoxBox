@@ -43,9 +43,9 @@ tests/              sessione simulata + test di tutte le pagine (python -m pytes
 `analisi.py` è separato apposta: quando vorrai passare a un sito "vero" (API FastAPI + frontend su misura),
 quella logica si riusa così com'è.
 
-## Prossimi passi possibili
+## Prossimi passi in programma:
 
-1. **Pubblicarlo**: Streamlit Community Cloud è gratuito e si collega a un repository GitHub.
+1. **Pubblicarlo**: Pubblicazione su Streamlit Community Cloud.
 2. **Precalcolare** i dati dopo ogni GP con un job automatico, così nessun visitatore aspetta il download.
 3. **Confronto su un giro a scelta** (non solo il più veloce) e confronto tra stagioni sulla stessa pista.
 4. **Pagina pilota** e **pagina stagione** (classifiche mondiali, andamento punti) con i dati Jolpica.
